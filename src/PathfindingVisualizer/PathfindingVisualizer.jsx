@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Node from './Node/Node';
+import { dijkstra } from '../algorithms/Dijkstra';
 
 import './PathfindingVisualizer.css';
 
@@ -34,12 +35,32 @@ export default class PathfindingVisulaizer extends Component {
     this.setState({ grid: newGrid });
   }
 
+  animateDijkstra(visitedNodesInOrder) {
+    for (let i = 0; i < visitedNodesInOrder.length; i++) {
+      
+
+        setTimeout(() => {
+            const node = visitedNodesInOrder[i];
+            document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited';
+        }, 10*i);
+    }
+  }
+
+  visualizeDijkstra() {
+    const { grid } = this.state;
+    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
+
+    this.animateDijkstra(visitedNodesInOrder);
+  }
+
   render() {
     const { grid, mouseIsPressed } = this.state;
 
     return (
       <>
-        <button onClick={() => {}}>Visualize Djikstra's Algorithm</button>
+        <button onClick={() => this.visualizeDijkstra()}>Visualize Djikstra's Algorithm</button>
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
@@ -56,7 +77,9 @@ export default class PathfindingVisulaizer extends Component {
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                      onMouseEnter={(row, col) =>
+                        this.handleMouseEnter(row, col)
+                      }
                       onMouseUp={() => this.handleMouseUp()}
                     />
                   );
