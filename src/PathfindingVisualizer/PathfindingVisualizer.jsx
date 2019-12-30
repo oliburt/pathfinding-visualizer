@@ -19,6 +19,21 @@ export default class PathfindingVisulaizer extends Component {
     this.setState({ grid });
   }
 
+  handleMouseDown(row, col) {
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    this.setState({ grid: newGrid, mouseIsPressed: true });
+  }
+
+  handleMouseUp() {
+    this.setState({ mouseIsPressed: false });
+  }
+
+  handleMouseEnter(row, col) {
+    if (!this.state.mouseIsPressed) return;
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    this.setState({ grid: newGrid });
+  }
+
   render() {
     const { grid, mouseIsPressed } = this.state;
 
@@ -27,23 +42,24 @@ export default class PathfindingVisulaizer extends Component {
         <button onClick={() => {}}>Visualize Djikstra's Algorithm</button>
         <div className="grid">
           {grid.map((row, rowIndex) => {
-            return <div key={rowIndex}>
-                    {row.map((node, nodeIndex) => {
-                        const {row, col, isFinish, isStart, isWall} = node;
-                        return (
-                            <Node 
-                                key={nodeIndex}
-                                row={row}
-                                col={col}
-                                isFinish={isFinish}
-                                isStart={isStart}
-                                isWall={isWall}
-                                mouseIsPressed={mouseIsPressed}
-            
-                            />
-                        )
-                    })}
-                </div>;
+            return (
+              <div key={rowIndex}>
+                {row.map((node, nodeIndex) => {
+                  const { row, col, isFinish, isStart, isWall } = node;
+                  return (
+                    <Node
+                      key={nodeIndex}
+                      row={row}
+                      col={col}
+                      isFinish={isFinish}
+                      isStart={isStart}
+                      isWall={isWall}
+                      mouseIsPressed={mouseIsPressed}
+                    />
+                  );
+                })}
+              </div>
+            );
           })}
         </div>
       </>
@@ -74,4 +90,15 @@ const createNode = (col, row) => {
     isWall: false,
     previousNode: null
   };
+};
+
+const getNewGridWithWallToggled = (grid, row, col) => {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
 };
