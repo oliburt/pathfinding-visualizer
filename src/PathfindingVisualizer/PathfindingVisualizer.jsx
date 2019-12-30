@@ -55,6 +55,9 @@ export default class PathfindingVisulaizer extends Component {
                       isStart={isStart}
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                      onMouseUp={() => this.handleMouseUp()}
                     />
                   );
                 })}
