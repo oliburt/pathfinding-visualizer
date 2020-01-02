@@ -12,7 +12,8 @@ export default class Node extends Component {
       isWall,
       onMouseDown,
       onMouseEnter,
-      onMouseUp
+      onMouseUp,
+      theRef
     } = this.props;
 
     const addedClass = isFinish
@@ -25,6 +26,7 @@ export default class Node extends Component {
 
     return (
       <div
+        ref={theRef}
         className={`node ${addedClass}`}
         id={`node-${row}-${col}`}
         onMouseDown={() => onMouseDown(row, col)}
