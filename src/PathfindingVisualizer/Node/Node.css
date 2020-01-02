@@ -20,6 +20,7 @@
 .node-visited {
     animation-name: visitedAnimation;
     animation-duration: 1.5s;
+    background-color: rgba(0, 190, 218, 0.75);
 }
 
 
