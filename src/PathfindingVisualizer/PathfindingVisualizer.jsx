@@ -3,6 +3,7 @@ import Node from './Node/Node';
 import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/Dijkstra';
 
 import './PathfindingVisualizer.css';
+import { createGrid, getNewGridWithWallToggled } from './utils/gridHelpers';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -12,11 +13,18 @@ const FINISH_NODE_COL = 35;
 export default class PathfindingVisulaizer extends Component {
   state = {
     grid: [],
-    mouseIsPressed: false
+    mouseIsPressed: false,
+    startNode: [10, 15],
+    finishNode: [10, 35]
   };
 
   componentDidMount() {
-    const grid = getInitialGrid();
+    const grid = createGrid(this.state.startNode, this.state.finishNode);
+    this.setState({ grid });
+  }
+
+  resetGrid() {
+    const grid = createGrid(this.state.startNode, this.state.finishNode);
     this.setState({ grid });
   }
 
@@ -79,6 +87,9 @@ export default class PathfindingVisulaizer extends Component {
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Djikstra's Algorithm
         </button>
+        <button onClick={() => this.resetGrid()}>
+          Reset
+        </button>
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
@@ -110,39 +121,3 @@ export default class PathfindingVisulaizer extends Component {
     );
   }
 }
-
-const getInitialGrid = () => {
-  const grid = [];
-  for (let row = 0; row < 20; row++) {
-    const currentRow = [];
-    for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(col, row));
-    }
-    grid.push(currentRow);
-  }
-  return grid;
-};
-
-const createNode = (col, row) => {
-  return {
-    col,
-    row,
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false,
-    previousNode: null
-  };
-};
-
-const getNewGridWithWallToggled = (grid, row, col) => {
-  const newGrid = grid.slice();
-  const node = newGrid[row][col];
-  const newNode = {
-    ...node,
-    isWall: !node.isWall
-  };
-  newGrid[row][col] = newNode;
-  return newGrid;
-};
