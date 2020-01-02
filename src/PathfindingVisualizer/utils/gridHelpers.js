@@ -1,32 +1,55 @@
-const createNode = (col, row, START_NODE, FINISH_NODE) => {
+import React from 'react';
+
+const createNode = (col, row, startNode, finishNode) => {
   return {
     col,
     row,
-    isStart: row === START_NODE[0] && col === START_NODE[1],
-    isFinish: row === FINISH_NODE[0] && col === FINISH_NODE[1],
+    isStart: row === startNode[0] && col === startNode[1],
+    isFinish: row === finishNode[0] && col === finishNode[1],
     distance: Infinity,
     isVisited: false,
     isWall: false,
-    previousNode: null
+    previousNode: null,
+    ref: React.createRef()
   };
 };
 
-export const createGrid = (START_NODE, FINISH_NODE) => {
+export const createGrid = (startNode, finishNode) => {
   const grid = [];
   for (let row = 0; row < 20; row++) {
     const currentRow = [];
     for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(col, row, START_NODE, FINISH_NODE));
+      currentRow.push(createNode(col, row, startNode, finishNode));
     }
     grid.push(currentRow);
   }
   return grid;
 };
 
+export const resetGrid = grid => {
+  const newGrid = [...grid];
+  newGrid.forEach(row => {
+    row.forEach(node => {
+      if (node.isStart) {
+        node.ref.current.className = 'node node-start';
+      } else if (node.isFinish) {
+        node.ref.current.className = 'node node-finish';
+      } else {
+        node.ref.current.className = 'node';
+      }
+      node.isWall = false;
+      node.distance = Infinity;
+      node.isVisited = false;
+      node.previousNode = null;
+    });
+  });
+  return newGrid;
+};
 
 export const getNewGridWithWallToggled = (grid, row, col) => {
   const newGrid = grid.slice();
   const node = newGrid[row][col];
+  if (node.isStart || node.isFinish) return newGrid;
   const newNode = {
     ...node,
     isWall: !node.isWall
