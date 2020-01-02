@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Node from './Node/Node';
-import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/Dijkstra';
+import { dijkstra } from '../algorithms/Dijkstra';
 
 import './PathfindingVisualizer.css';
 import {
@@ -10,6 +10,8 @@ import {
   getNewGridWithStartToggled,
   getNewGridWithFinishToggled
 } from './utils/gridHelpers';
+import { astar } from '../algorithms/Astar';
+import { getNodesInShortestPathOrder } from '../algorithms/helpers';
 
 export default class PathfindingVisulaizer extends Component {
   state = {
@@ -58,10 +60,10 @@ export default class PathfindingVisulaizer extends Component {
     let finishNode = this.state.finishNode;
     if (this.state.draggingStartNode) {
       newGrid = getNewGridWithStartToggled(this.state.grid, row, col);
-      startNode = [row, col]
+      startNode = [row, col];
     } else if (this.state.draggingFinishNode) {
       newGrid = getNewGridWithFinishToggled(this.state.grid, row, col);
-      finishNode = [row, col]
+      finishNode = [row, col];
     } else {
       newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     }
@@ -102,6 +104,15 @@ export default class PathfindingVisulaizer extends Component {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
+  visualizeAstar() {
+    const { grid, startNode, finishNode } = this.state;
+    const startNodeObj = grid[startNode[0]][startNode[1]];
+    const finishNodeObj = grid[finishNode[0]][finishNode[1]];
+    const visitedNodesInOrder = astar(grid, startNodeObj, finishNodeObj);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
+    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
   render() {
     const { grid, mouseIsPressed } = this.state;
 
@@ -109,6 +120,9 @@ export default class PathfindingVisulaizer extends Component {
       <>
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Djikstra's Algorithm
+        </button>
+        <button onClick={() => this.visualizeAstar()}>
+          Visualize Astar's Algorithm
         </button>
         <button onClick={() => this.resetGrid()}>Reset</button>
         <div className="grid">

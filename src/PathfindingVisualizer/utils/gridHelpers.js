@@ -10,7 +10,8 @@ const createNode = (col, row, startNode, finishNode) => {
     isVisited: false,
     isWall: false,
     previousNode: null,
-    ref: React.createRef()
+    ref: React.createRef(),
+    fScore: Infinity
   };
 };
 
