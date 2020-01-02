@@ -57,3 +57,21 @@ export const getNewGridWithWallToggled = (grid, row, col) => {
   newGrid[row][col] = newNode;
   return newGrid;
 };
+
+export const getNewGridWithStartToggled = (grid, row, col) => {
+  const newGrid = noStartNodes(grid);
+  console.log(newGrid)
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isStart: true
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+};
+
+const noStartNodes = grid => {
+  return grid.map(row => {
+    return row.map(node => ({ ...node, isStart: false }));
+  });
+};
