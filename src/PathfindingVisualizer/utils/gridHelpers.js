@@ -60,7 +60,6 @@ export const getNewGridWithWallToggled = (grid, row, col) => {
 
 export const getNewGridWithStartToggled = (grid, row, col) => {
   const newGrid = noStartNodes(grid);
-  console.log(newGrid)
   const node = newGrid[row][col];
   const newNode = {
     ...node,
@@ -73,5 +72,22 @@ export const getNewGridWithStartToggled = (grid, row, col) => {
 const noStartNodes = grid => {
   return grid.map(row => {
     return row.map(node => ({ ...node, isStart: false }));
+  });
+};
+
+export const getNewGridWithFinishToggled = (grid, row, col) => {
+  const newGrid = noFinishNodes(grid);
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isFinish: true
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+};
+
+const noFinishNodes = grid => {
+  return grid.map(row => {
+    return row.map(node => ({ ...node, isFinish: false }));
   });
 };
