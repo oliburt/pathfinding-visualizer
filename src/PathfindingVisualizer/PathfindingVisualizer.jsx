@@ -3,7 +3,7 @@ import Node from './Node/Node';
 import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/Dijkstra';
 
 import './PathfindingVisualizer.css';
-import { createGrid, getNewGridWithWallToggled } from './utils/gridHelpers';
+import { createGrid, getNewGridWithWallToggled, resetGrid } from './utils/gridHelpers';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -24,7 +24,7 @@ export default class PathfindingVisulaizer extends Component {
   }
 
   resetGrid() {
-    const grid = createGrid(this.state.startNode, this.state.finishNode);
+    const grid = resetGrid(this.state.grid);
     this.setState({ grid });
   }
 
@@ -47,8 +47,7 @@ export default class PathfindingVisulaizer extends Component {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-shortest-path';
+        node.ref.current.className = 'node node-shortest-path';
       }, 50 * i);
     }
   }
@@ -64,8 +63,7 @@ export default class PathfindingVisulaizer extends Component {
 
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-visited';
+        node.ref.current.className = 'node node-visited';
       }, 10 * i);
     }
   }
@@ -87,20 +85,26 @@ export default class PathfindingVisulaizer extends Component {
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Djikstra's Algorithm
         </button>
-        <button onClick={() => this.resetGrid()}>
-          Reset
-        </button>
+        <button onClick={() => this.resetGrid()}>Reset</button>
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
               <div key={rowIndex}>
                 {row.map((node, nodeIndex) => {
-                  const { row, col, isFinish, isStart, isWall } = node;
+                  const {
+                    row,
+                    col,
+                    isFinish,
+                    isStart,
+                    isWall,
+                    ref
+                  } = node;
                   return (
                     <Node
                       key={nodeIndex}
                       row={row}
                       col={col}
+                      theRef={ref}
                       isFinish={isFinish}
                       isStart={isStart}
                       isWall={isWall}
