@@ -23,9 +23,9 @@ export const getSpeeds = searchSpeed => {
 
 export const createGrid = (startNode, finishNode) => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  for (let row = 0; row < 30; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
+    for (let col = 0; col < 80; col++) {
       currentRow.push(createNode(col, row, startNode, finishNode));
     }
     grid.push(currentRow);
@@ -87,6 +87,18 @@ export const getNewGridWithWallToggled = (grid, row, col) => {
   newGrid[row][col] = newNode;
   return newGrid;
 };
+
+export const getNewGridWithRandomWalls = (grid) => {
+  const newGrid = grid.map(row => {
+    return row.map(node => {
+      if (Math.random < 0.3) {
+        node.isWall = true
+      }
+      return node
+    })
+  })
+  return newGrid;
+}
 
 export const getNewGridWithStartToggled = (grid, row, col) => {
   const newGrid = noStartNodes(grid);
