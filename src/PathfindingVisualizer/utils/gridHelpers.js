@@ -15,6 +15,12 @@ const createNode = (col, row, startNode, finishNode) => {
   };
 };
 
+export const getSpeeds = searchSpeed => {
+    if (searchSpeed === 'fast') return 10
+    if (searchSpeed === 'average') return 60
+    if (searchSpeed === 'slow') return 80
+}
+
 export const createGrid = (startNode, finishNode) => {
   const grid = [];
   for (let row = 0; row < 20; row++) {
@@ -27,7 +33,29 @@ export const createGrid = (startNode, finishNode) => {
   return grid;
 };
 
-export const resetGrid = grid => {
+export const resetSearch = grid => {
+  const newGrid = [...grid];
+  newGrid.forEach(row => {
+    row.forEach(node => {
+      if (node.isStart) {
+        node.ref.current.className = 'node node-start';
+      } else if (node.isFinish) {
+        node.ref.current.className = 'node node-finish';
+      } else if (node.isWall) {
+        node.ref.current.className = 'node node-wall';
+      } else {
+        node.ref.current.className = 'node';
+      }
+      node.distance = Infinity;
+      node.isVisited = false;
+      node.previousNode = null;
+      node.fScore = Infinity;
+    });
+  });
+  return newGrid;
+};
+
+export const fullReset = grid => {
   const newGrid = [...grid];
   newGrid.forEach(row => {
     row.forEach(node => {
@@ -42,6 +70,7 @@ export const resetGrid = grid => {
       node.distance = Infinity;
       node.isVisited = false;
       node.previousNode = null;
+      node.fScore = Infinity;
     });
   });
   return newGrid;

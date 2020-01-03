@@ -1,6 +1,6 @@
-import { getNeighbors, heuristic } from './helpers';
+import { getNeighbors } from './helpers';
 
-export const astar = (grid, startNode, finishNode) => {
+export const astar = (grid, startNode, finishNode, heuristic) => {
   const visitedNodesInOrder = [];
   let openSet = [];
   let closedSet = [];
@@ -14,6 +14,11 @@ export const astar = (grid, startNode, finishNode) => {
     let current = openSet.reduce((acc, node) =>
       node.fScore < acc.fScore ? node : acc
     );
+
+    openSet = openSet.filter(node => node !== current);
+
+    if (current.isWall) continue;
+
     current.isVisited = true;
 
     visitedNodesInOrder.push(current);
@@ -22,7 +27,6 @@ export const astar = (grid, startNode, finishNode) => {
 
     // If current is not finish node then:
     // remove current from openSet
-    openSet = openSet.filter(node => node !== current);
     // push into closedSet
     closedSet.push(current);
 

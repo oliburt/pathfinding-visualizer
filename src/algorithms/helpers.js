@@ -13,9 +13,14 @@ export function getUnvistedNeighbors(node, grid) {
   return neighbors.filter(neighbor => !neighbor.isVisited);
 }
 
-export function heuristic(currentNode, finishNode) {
+export function euclideanHeuristic(currentNode, finishNode) {
     const euclidDistance = Math.hypot(finishNode.row - currentNode.row, finishNode.col - currentNode.col)
     return euclidDistance
+}
+
+export function manhattanHeuristic(currentNode, finishNode) {
+    const manhattanDistance = Math.abs(finishNode.row - currentNode.row) + Math.abs(finishNode.col - currentNode.col)
+    return manhattanDistance
 }
 
 // Backtracks from the finishNode to find the shortest path.

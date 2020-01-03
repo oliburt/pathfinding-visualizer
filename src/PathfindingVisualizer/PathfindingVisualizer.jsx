@@ -6,12 +6,15 @@ import './PathfindingVisualizer.css';
 import {
   createGrid,
   getNewGridWithWallToggled,
-  resetGrid,
+  fullReset,
   getNewGridWithStartToggled,
-  getNewGridWithFinishToggled
+  getNewGridWithFinishToggled,
+  resetSearch,
+  getSpeeds
 } from './utils/gridHelpers';
 import { astar } from '../algorithms/Astar';
 import { getNodesInShortestPathOrder } from '../algorithms/helpers';
+import Bar from './Bar/Bar';
 
 export default class PathfindingVisulaizer extends Component {
   state = {
@@ -20,18 +23,31 @@ export default class PathfindingVisulaizer extends Component {
     startNode: [10, 15],
     finishNode: [10, 35],
     draggingStartNode: false,
-    draggingFinishNode: false
+    draggingFinishNode: false,
+    searchSpeed: 'fast',
+    heuristic: 'manhattan',
+    algorithm: 'dijkstra',
+    isSearchRunning: false
   };
+
+  setSearchSpeed = searchSpeed => this.setState({ searchSpeed });
+
+  setIsSearchRunning = bool => this.setState({ isSearchRunning: bool });
 
   componentDidMount() {
     const grid = createGrid(this.state.startNode, this.state.finishNode);
     this.setState({ grid });
   }
 
-  resetGrid() {
-    const grid = resetGrid(this.state.grid);
+  fullReset = () => {
+    const grid = fullReset(this.state.grid);
     this.setState({ grid });
-  }
+  };
+
+  resetSearch = () => {
+    const grid = resetSearch(this.state.grid);
+    this.setState({ grid });
+  };
 
   handleMouseDown(row, col) {
     const node = this.state.grid[row][col];
@@ -70,6 +86,14 @@ export default class PathfindingVisulaizer extends Component {
     this.setState({ grid: newGrid, startNode, finishNode });
   }
 
+  handleAlgChange = algorithm => {
+    this.setState({ algorithm });
+  };
+
+  handleHeuristicChange = heuristic => {
+    this.setState({ heuristic });
+  };
+
   animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
@@ -77,54 +101,79 @@ export default class PathfindingVisulaizer extends Component {
         node.ref.current.className = 'node node-shortest-path';
       }, 50 * i);
     }
+    setTimeout(() => {
+      this.setIsSearchRunning(false);
+    }, 50 * nodesInShortestPathOrder.length);
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animateSearch(visitedNodesInOrder, nodesInShortestPathOrder) {
+    let speed = getSpeeds(this.state.searchSpeed);
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           this.animateShortestPath(nodesInShortestPathOrder);
-        }, 10 * i);
+        }, speed * i);
         return;
       }
 
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         node.ref.current.className = 'node node-visited';
-      }, 10 * i);
+      }, speed * i);
     }
   }
 
-  visualizeDijkstra() {
+  visualizeDijkstra = () => {
     const { grid, startNode, finishNode } = this.state;
     const startNodeObj = grid[startNode[0]][startNode[1]];
     const finishNodeObj = grid[finishNode[0]][finishNode[1]];
+    this.resetSearch();
     const visitedNodesInOrder = dijkstra(grid, startNodeObj, finishNodeObj);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  }
+    this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
 
-  visualizeAstar() {
+  visualizeAstar = heuristic => {
     const { grid, startNode, finishNode } = this.state;
     const startNodeObj = grid[startNode[0]][startNode[1]];
     const finishNodeObj = grid[finishNode[0]][finishNode[1]];
-    const visitedNodesInOrder = astar(grid, startNodeObj, finishNodeObj);
+    this.resetSearch();
+    const visitedNodesInOrder = astar(
+      grid,
+      startNodeObj,
+      finishNodeObj,
+      heuristic
+    );
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
-  }
+    this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
+  };
 
   render() {
-    const { grid, mouseIsPressed } = this.state;
+    const {
+      grid,
+      mouseIsPressed,
+      algorithm,
+      heuristic,
+      isSearchRunning,
+      searchSpeed
+    } = this.state;
 
     return (
       <>
-        <button onClick={() => this.visualizeDijkstra()}>
-          Visualize Djikstra's Algorithm
-        </button>
-        <button onClick={() => this.visualizeAstar()}>
-          Visualize Astar's Algorithm
-        </button>
-        <button onClick={() => this.resetGrid()}>Reset</button>
+        <Bar
+          algorithm={algorithm}
+          heuristic={heuristic}
+          visualizeAstar={this.visualizeAstar}
+          visualizeDijkstra={this.visualizeDijkstra}
+          fullReset={this.fullReset}
+          resetSearch={this.resetSearch}
+          handleAlgChange={this.handleAlgChange}
+          handleHeuristicChange={this.handleHeuristicChange}
+          setIsSearchRunning={this.setIsSearchRunning}
+          isSearchRunning={isSearchRunning}
+          searchSpeed={searchSpeed}
+          setSearchSpeed={this.setSearchSpeed}
+        />
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
