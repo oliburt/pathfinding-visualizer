@@ -1,0 +1,8 @@
+button {
+    margin: 0.2rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-evenly;
+}
