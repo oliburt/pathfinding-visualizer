@@ -20,8 +20,8 @@ export default class PathfindingVisulaizer extends Component {
   state = {
     grid: [],
     mouseIsPressed: false,
-    startNode: [10, 15],
-    finishNode: [10, 35],
+    startNode: [15, 20],
+    finishNode: [15, 60],
     draggingStartNode: false,
     draggingFinishNode: false,
     searchSpeed: 'fast',
