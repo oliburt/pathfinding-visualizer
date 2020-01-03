@@ -7,6 +7,7 @@ import {
 } from '../../algorithms/helpers';
 import ResetButtons from './components/ResetButtons';
 import AlgOptions from './components/AlgOptions';
+import ObstacleButtons from './components/ObstacleButtons';
 
 export default class Bar extends Component {
   heuristicAlg(heuristic, alg) {
@@ -63,6 +64,7 @@ export default class Bar extends Component {
             heuristic={heuristic}
             nonHeuristicAlgs={this.nonHeuristicAlgs}
           />
+          <ObstacleButtons />
           <ResetButtons
             fullReset={fullReset}
             isSearchRunning={isSearchRunning}
@@ -70,12 +72,14 @@ export default class Bar extends Component {
           />
         </div>
         <br />
-        <button
-          className="button is-primary is-medium is-rounded"
-          onClick={() => this.startAlg(algorithm, heuristic)}
-        >
-          Visualize
-        </button>
+        <div className='visualizeWrapper'>
+          <button
+            className="button is-primary is-fullwidth"
+            onClick={() => this.startAlg(algorithm, heuristic)}
+          >
+            Visualize
+          </button>
+        </div>
       </div>
     );
   }
