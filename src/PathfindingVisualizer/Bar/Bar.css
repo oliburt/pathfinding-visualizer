@@ -10,3 +10,8 @@ button {
 .optionBar {
     background-color: whitesmoke;
 }
+
+.visualizeWrapper {
+    width: 70%;
+    margin: 5px auto;
+}
