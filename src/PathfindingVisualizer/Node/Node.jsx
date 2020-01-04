@@ -8,17 +8,28 @@ export default class Node extends Component {
     if (props.isStart) return 'node-start'
     if (props.isWall) return 'node-wall'
   }
-  
   render() {
     const {
       col,
       row,
+      isStart,
+      isFinish,
       onMouseDown,
       onMouseEnter,
       onMouseUp,
       theRef
     } = this.props;
 
+    const finishBorder = {
+      outline: '1px solid red',
+      outlineOffset: '-2px'
+    }
+
+    const startBorder = {
+      outline: '1px solid green',
+      outlineOffset: '-2px'
+    }
+    
     return (
       <div
         ref={theRef}
@@ -27,6 +38,7 @@ export default class Node extends Component {
         onMouseDown={() => onMouseDown(row, col)}
         onMouseEnter={() => onMouseEnter(row, col)}
         onMouseUp={() => onMouseUp()}
+        style={isStart ? startBorder : isFinish ? finishBorder : null}
       ></div>
     );
   }

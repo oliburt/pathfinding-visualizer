@@ -28,7 +28,8 @@ export default class PathfindingVisulaizer extends Component {
     searchSpeed: 'fast',
     heuristic: 'manhattan',
     algorithm: 'dijkstra',
-    isSearchRunning: false
+    isSearchRunning: false,
+    steps: null
   };
 
   setSearchSpeed = searchSpeed => this.setState({ searchSpeed });
@@ -42,12 +43,12 @@ export default class PathfindingVisulaizer extends Component {
 
   fullReset = () => {
     const grid = fullReset(this.state.grid);
-    this.setState({ grid });
+    this.setState({ grid, steps: null });
   };
 
   resetSearch = () => {
     const grid = resetSearch(this.state.grid);
-    this.setState({ grid });
+    this.setState({ grid, steps: null });
   };
 
   handleMouseDown(row, col) {
@@ -98,7 +99,7 @@ export default class PathfindingVisulaizer extends Component {
 
   randomWalls = () => {
     const newGrid = getNewGridWithRandomWalls(this.state.grid);
-    this.resetSearch()
+    this.resetSearch();
     this.setState({ grid: newGrid });
   };
 
@@ -111,6 +112,7 @@ export default class PathfindingVisulaizer extends Component {
     }
     setTimeout(() => {
       this.setIsSearchRunning(false);
+      this.setState({steps: nodesInShortestPathOrder.length - 1})
     }, 50 * nodesInShortestPathOrder.length);
   }
 
@@ -163,7 +165,8 @@ export default class PathfindingVisulaizer extends Component {
       algorithm,
       heuristic,
       isSearchRunning,
-      searchSpeed
+      searchSpeed,
+      steps
     } = this.state;
 
     return (
@@ -183,6 +186,11 @@ export default class PathfindingVisulaizer extends Component {
           setSearchSpeed={this.setSearchSpeed}
           randomWalls={this.randomWalls}
         />
+        {steps ? (
+          <div className='notification'>
+            Steps in path: {steps}
+          </div>
+        ) : null}
         <div className="grid">
           {grid.map((row, rowIndex) => {
             return (
