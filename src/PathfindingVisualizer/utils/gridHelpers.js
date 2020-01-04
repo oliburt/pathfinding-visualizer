@@ -4,11 +4,11 @@ const createNode = (col, row, startNode, finishNode) => {
   return {
     col,
     row,
+    isWall: false,
     isStart: row === startNode[0] && col === startNode[1],
     isFinish: row === finishNode[0] && col === finishNode[1],
     distance: Infinity,
     isVisited: false,
-    isWall: false,
     previousNode: null,
     ref: React.createRef(),
     fScore: Infinity
@@ -16,16 +16,16 @@ const createNode = (col, row, startNode, finishNode) => {
 };
 
 export const getSpeeds = searchSpeed => {
-    if (searchSpeed === 'fast') return 10
-    if (searchSpeed === 'average') return 60
-    if (searchSpeed === 'slow') return 80
-}
+  if (searchSpeed === 'fast') return 10;
+  if (searchSpeed === 'average') return 60;
+  if (searchSpeed === 'slow') return 80;
+};
 
 export const createGrid = (startNode, finishNode) => {
   const grid = [];
   for (let row = 0; row < 30; row++) {
     const currentRow = [];
-    for (let col = 0; col < 80; col++) {
+    for (let col = 0; col < 90; col++) {
       currentRow.push(createNode(col, row, startNode, finishNode));
     }
     grid.push(currentRow);
@@ -34,7 +34,7 @@ export const createGrid = (startNode, finishNode) => {
 };
 
 export const resetSearch = grid => {
-  const newGrid = [...grid];
+  const newGrid = deepCloneGrid(grid);
   newGrid.forEach(row => {
     row.forEach(node => {
       if (node.isStart) {
@@ -56,7 +56,7 @@ export const resetSearch = grid => {
 };
 
 export const fullReset = grid => {
-  const newGrid = [...grid];
+  const newGrid = deepCloneGrid(grid);
   newGrid.forEach(row => {
     row.forEach(node => {
       if (node.isStart) {
@@ -73,11 +73,12 @@ export const fullReset = grid => {
       node.fScore = Infinity;
     });
   });
+  console.log('finish full reset')
   return newGrid;
 };
 
 export const getNewGridWithWallToggled = (grid, row, col) => {
-  const newGrid = grid.slice();
+  const newGrid = deepCloneGrid(grid);
   const node = newGrid[row][col];
   if (node.isStart || node.isFinish) return newGrid;
   const newNode = {
@@ -88,17 +89,21 @@ export const getNewGridWithWallToggled = (grid, row, col) => {
   return newGrid;
 };
 
-export const getNewGridWithRandomWalls = (grid) => {
-  const newGrid = grid.map(row => {
+export const getNewGridWithRandomWalls = grid => {
+  const resetGrid = fullReset(grid);
+  const newGrid = resetGrid.map(row => {
     return row.map(node => {
-      if (Math.random < 0.3) {
-        node.isWall = true
+      if (Math.random() < 0.3 && !node.isStart && !node.isFinish) {
+        node.isWall = true;
+      } else {
+        node.isWall = false;
       }
-      return node
-    })
-  })
+      return node;
+    });
+  });
+  console.log('finished random walls')
   return newGrid;
-}
+};
 
 export const getNewGridWithStartToggled = (grid, row, col) => {
   const newGrid = noStartNodes(grid);
@@ -112,7 +117,9 @@ export const getNewGridWithStartToggled = (grid, row, col) => {
 };
 
 const noStartNodes = grid => {
-  return grid.map(row => {
+  const newGrid = deepCloneGrid(grid);
+
+  return newGrid.map(row => {
     return row.map(node => ({ ...node, isStart: false }));
   });
 };
@@ -129,7 +136,18 @@ export const getNewGridWithFinishToggled = (grid, row, col) => {
 };
 
 const noFinishNodes = grid => {
-  return grid.map(row => {
+  const newGrid = deepCloneGrid(grid);
+  return newGrid.map(row => {
     return row.map(node => ({ ...node, isFinish: false }));
+  });
+};
+
+const deepCloneGrid = grid => {
+  return grid.map(row => {
+    return row.map(node => {
+      return {
+        ...node
+      };
+    });
   });
 };

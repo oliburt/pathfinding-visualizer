@@ -27,6 +27,7 @@ export function manhattanHeuristic(currentNode, finishNode) {
 // Only works when called *after* the dijkstra method above.
 export function getNodesInShortestPathOrder(finishNode) {
     const nodesInShortestPathOrder = [];
+    if (!finishNode.previousNode) return [];
     let currentNode = finishNode;
     while (currentNode !== null) {
       nodesInShortestPathOrder.unshift(currentNode);

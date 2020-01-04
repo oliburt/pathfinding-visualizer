@@ -49,7 +49,8 @@ export default class Bar extends Component {
       handleHeuristicChange,
       isSearchRunning,
       searchSpeed,
-      setSearchSpeed
+      setSearchSpeed,
+      randomWalls
     } = this.props;
 
     return (
@@ -64,7 +65,10 @@ export default class Bar extends Component {
             heuristic={heuristic}
             nonHeuristicAlgs={this.nonHeuristicAlgs}
           />
-          <ObstacleButtons />
+          <ObstacleButtons
+            randomWalls={randomWalls}
+            isSearchRunning={isSearchRunning}
+          />
           <ResetButtons
             fullReset={fullReset}
             isSearchRunning={isSearchRunning}
@@ -72,7 +76,7 @@ export default class Bar extends Component {
           />
         </div>
         <br />
-        <div className='visualizeWrapper'>
+        <div className="visualizeWrapper">
           <button
             className="button is-primary is-fullwidth"
             onClick={() => this.startAlg(algorithm, heuristic)}

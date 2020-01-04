@@ -10,7 +10,8 @@ import {
   getNewGridWithStartToggled,
   getNewGridWithFinishToggled,
   resetSearch,
-  getSpeeds
+  getSpeeds,
+  getNewGridWithRandomWalls
 } from './utils/gridHelpers';
 import { astar } from '../algorithms/Astar';
 import { getNodesInShortestPathOrder } from '../algorithms/helpers';
@@ -20,8 +21,8 @@ export default class PathfindingVisulaizer extends Component {
   state = {
     grid: [],
     mouseIsPressed: false,
-    startNode: [15, 20],
-    finishNode: [15, 60],
+    startNode: [14, 19],
+    finishNode: [14, 69],
     draggingStartNode: false,
     draggingFinishNode: false,
     searchSpeed: 'fast',
@@ -51,6 +52,7 @@ export default class PathfindingVisulaizer extends Component {
 
   handleMouseDown(row, col) {
     const node = this.state.grid[row][col];
+
     if (node.isStart) {
       this.setState({ mouseIsPressed: true, draggingStartNode: true });
     } else if (node.isFinish) {
@@ -92,6 +94,12 @@ export default class PathfindingVisulaizer extends Component {
 
   handleHeuristicChange = heuristic => {
     this.setState({ heuristic });
+  };
+
+  randomWalls = () => {
+    const newGrid = getNewGridWithRandomWalls(this.state.grid);
+    this.resetSearch()
+    this.setState({ grid: newGrid });
   };
 
   animateShortestPath(nodesInShortestPathOrder) {
@@ -173,6 +181,7 @@ export default class PathfindingVisulaizer extends Component {
           isSearchRunning={isSearchRunning}
           searchSpeed={searchSpeed}
           setSearchSpeed={this.setSearchSpeed}
+          randomWalls={this.randomWalls}
         />
         <div className="grid">
           {grid.map((row, rowIndex) => {
