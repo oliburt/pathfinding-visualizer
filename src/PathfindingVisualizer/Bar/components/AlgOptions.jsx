@@ -49,6 +49,8 @@ export default function AlgOptions({
           >
             <option value="manhattan">Manhattan</option>
             <option value="euclidean">Euclidean</option>
+            <option value="octile">Octile</option>
+            <option value="chebyshev">Chebyshev</option>
           </select>
         </>
       ) : null}

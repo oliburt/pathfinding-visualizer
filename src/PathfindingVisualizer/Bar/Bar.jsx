@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import './Bar.css';
 import {
   euclideanHeuristic,
-  manhattanHeuristic
-} from '../../algorithms/helpers';
+  manhattanHeuristic,
+  octileHeuristic,
+  chebyshevHeuristic
+} from '../../algorithms/heuristics';
 import ResetButtons from './components/ResetButtons';
 import AlgOptions from './components/AlgOptions';
 import ObstacleButtons from './components/ObstacleButtons';
@@ -16,6 +18,8 @@ export default class Bar extends Component {
     if (alg === 'astar') {
       if (heuristic === 'euclidean') visualizeAstar(euclideanHeuristic);
       if (heuristic === 'manhattan') visualizeAstar(manhattanHeuristic);
+      if (heuristic === 'octile') visualizeAstar(octileHeuristic);
+      if (heuristic === 'chebyshev') visualizeAstar(chebyshevHeuristic);
     }
   }
 
