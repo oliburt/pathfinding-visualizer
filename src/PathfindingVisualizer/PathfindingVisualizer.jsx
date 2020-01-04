@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Node from './Node/Node';
-import { dijkstra } from '../algorithms/Dijkstra';
+// import { dijkstra } from '../algorithms/Dijkstra';
+import { dijkstra2 } from '../algorithms/dijkstra2';
 
 import './PathfindingVisualizer.css';
 import {
@@ -138,7 +139,7 @@ export default class PathfindingVisulaizer extends Component {
     const startNodeObj = grid[startNode[0]][startNode[1]];
     const finishNodeObj = grid[finishNode[0]][finishNode[1]];
     this.resetSearch();
-    const visitedNodesInOrder = dijkstra(grid, startNodeObj, finishNodeObj);
+    const visitedNodesInOrder = dijkstra2(grid, startNodeObj, finishNodeObj);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
     this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
   };
