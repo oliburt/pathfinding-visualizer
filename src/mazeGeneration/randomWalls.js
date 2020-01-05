@@ -18,7 +18,7 @@ export const getNewGridWithRandomWalls = grid => {
   return { newGrid, wallNodesInOrder };
 };
 
-function shuffle(array) {
+export function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
   
     // While there remain elements to shuffle...

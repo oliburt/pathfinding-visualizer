@@ -22,7 +22,7 @@ function isAvailable(node) {
   return !node.isStart && !node.isFinish && !node.isWall;
 }
 
-function addOuterWalls(grid, wallNodesInOrder) {
+export function addOuterWalls(grid, wallNodesInOrder) {
   for (var i = 0; i < grid.length; i++) {
     if (i === 0 || i === grid.length - 1) {
       for (var j = 0; j < grid[i].length; j++) {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ObstacleButtons({ isSearchRunning, randomWalls, recursiveDivisionWalls }) {
+export default function ObstacleButtons({ isSearchRunning, randomWalls, recursiveDivisionWalls, recursiveBacktrackingMaze }) {
   return (
     <div className="obstacleButtons">
       <h5 className="title is-6">Obstacles</h5>
@@ -19,6 +19,14 @@ export default function ObstacleButtons({ isSearchRunning, randomWalls, recursiv
         disabled={isSearchRunning}
       >
         Recursive Division Maze
+      </button>
+      <br/>
+      <button
+        className="button is-success is-small is-rounded"
+        onClick={() => recursiveBacktrackingMaze()}
+        disabled={isSearchRunning}
+      >
+        Recursive Backtracking Maze
       </button>
     </div>
   );

@@ -17,9 +17,8 @@ import { astar } from '../searchAlgorithms/Astar';
 import { getNodesInShortestPathOrder } from '../searchAlgorithms/helpers';
 import Bar from './Bar/Bar';
 import { getNewGridWithRandomWalls } from '../mazeGeneration/randomWalls';
-import {
-  recursiveDivisionMaze
-} from '../mazeGeneration/recursiveDivision';
+import { recursiveDivisionMaze } from '../mazeGeneration/recursiveDivision';
+import { recursiveBacktracking } from '../mazeGeneration/recursiveBacktracking';
 
 export default class PathfindingVisulaizer extends Component {
   state = {
@@ -122,6 +121,14 @@ export default class PathfindingVisulaizer extends Component {
     this.animateWalls(wallNodesInOrder, newGrid);
   };
 
+  recursiveBacktrackingMaze = () => {
+    const { newGrid, nonWallNodesInOrder } = recursiveBacktracking(
+      this.state.grid
+    );
+
+    this.animateMaze(nonWallNodesInOrder, newGrid);
+  };
+
   animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
@@ -153,7 +160,7 @@ export default class PathfindingVisulaizer extends Component {
   }
 
   animateWalls(wallNodesInOrder, grid) {
-    this.fullReset()
+    this.fullReset();
     for (let i = 0; i < wallNodesInOrder.length; i++) {
       setTimeout(() => {
         const node = wallNodesInOrder[i];
@@ -163,6 +170,26 @@ export default class PathfindingVisulaizer extends Component {
     setTimeout(() => {
       this.setState({ isSearchRunning: false, grid });
     }, 10 * wallNodesInOrder.length);
+  }
+
+  animateMaze(nonWallNodesInOrder, newGrid) {
+    this.state.grid.map(row =>
+      row.map(node => {
+        if (!node.isStart && !node.isFinish)
+          node.ref.current.className = 'node node-wall';
+        if (node.isStart) node.ref.current.className = 'node node-start';
+        if (node.isFinish) node.ref.current.className = 'node node-finish';
+      })
+    );
+    for (let i = 0; i < nonWallNodesInOrder.length; i++) {
+      setTimeout(() => {
+        const node = nonWallNodesInOrder[i];
+        node.ref.current.className = 'node';
+      }, 10 * i);
+    }
+    setTimeout(() => {
+      this.setState({ isSearchRunning: false, grid: newGrid });
+    }, 10 * nonWallNodesInOrder.length);
   }
 
   visualizeDijkstra = () => {
@@ -240,6 +267,7 @@ export default class PathfindingVisulaizer extends Component {
           setSearchSpeed={this.setSearchSpeed}
           randomWalls={this.randomWalls}
           recursiveDivisionWalls={this.recursiveDivisionWalls}
+          recursiveBacktrackingMaze={this.recursiveBacktrackingMaze}
           diagonalMovement={diagonalMovement}
           handleDiagChange={this.handleDiagChange}
           diagonalWeight={diagonalWeight}

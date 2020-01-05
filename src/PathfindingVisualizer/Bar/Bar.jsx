@@ -60,7 +60,8 @@ export default class Bar extends Component {
       handleDiagChange,
       diagonalWeight,
       setDiagonalWeight,
-      recursiveDivisionWalls
+      recursiveDivisionWalls,
+      recursiveBacktrackingMaze
     } = this.props;
 
     return (
@@ -85,6 +86,7 @@ export default class Bar extends Component {
             randomWalls={randomWalls}
             isSearchRunning={isSearchRunning}
             recursiveDivisionWalls={recursiveDivisionWalls}
+            recursiveBacktrackingMaze={recursiveBacktrackingMaze}
           />
           <ResetButtons
             fullReset={fullReset}
