@@ -10,6 +10,7 @@ import {
 import ResetButtons from './components/ResetButtons';
 import AlgOptions from './components/AlgOptions';
 import ObstacleButtons from './components/ObstacleButtons';
+import DiagonalOptions from './components/DiagonalOptions';
 
 export default class Bar extends Component {
   heuristicAlg(heuristic, alg) {
@@ -54,7 +55,11 @@ export default class Bar extends Component {
       isSearchRunning,
       searchSpeed,
       setSearchSpeed,
-      randomWalls
+      randomWalls,
+      diagonalMovement,
+      handleDiagChange,
+      diagonalWeight,
+      setDiagonalWeight
     } = this.props;
 
     return (
@@ -68,6 +73,12 @@ export default class Bar extends Component {
             algorithm={algorithm}
             heuristic={heuristic}
             nonHeuristicAlgs={this.nonHeuristicAlgs}
+          />
+          <DiagonalOptions
+            diagonalMovement={diagonalMovement}
+            handleDiagChange={handleDiagChange}
+            diagonalWeight={diagonalWeight}
+            setDiagonalWeight={setDiagonalWeight}
           />
           <ObstacleButtons
             randomWalls={randomWalls}
