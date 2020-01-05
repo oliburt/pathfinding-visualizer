@@ -1,6 +1,6 @@
-import { getUnvistedNeighbors } from './helpers';
+import { getUnvisitedNeighbors } from './helpers';
 
-export const astar = (grid, startNode, finishNode, heuristic) => {
+export const astar = (grid, startNode, finishNode, heuristic, diagonalMovement, diagonalWeight) => {
   let openSet = [];
   const visitedNodesInOrder = []; // closedSet
   openSet.push(startNode);
@@ -30,11 +30,17 @@ export const astar = (grid, startNode, finishNode, heuristic) => {
     // closedSet.push(current);
 
     // Get neighbors and update distances
-    const unvisitedNeigbors = getUnvistedNeighbors(current, grid);
+    const unvisitedNeigbors = getUnvisitedNeighbors(current, grid, diagonalMovement);
     for (const neighbor of unvisitedNeigbors) {
       // Tentative distance to be used if it is first or lower than
       // previous distances
-      const tentativeDistance = current.distance + 1;
+      let tentativeDistance;
+      if (diagonalWeight === '1') {
+        tentativeDistance = current.distance + 1;
+      }
+      if (diagonalWeight === 'root2') {
+        tentativeDistance = current.distance + ((neighbor.col - current.col === 0 || neighbor.row - current.row === 0) ? 1 : Math.SQRT2);
+      }
 
       // Check if tentativeDistance is lower than any prev distances
       if (tentativeDistance < neighbor.distance) {

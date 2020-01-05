@@ -30,8 +30,13 @@ export default class PathfindingVisulaizer extends Component {
     heuristic: 'manhattan',
     algorithm: 'dijkstra',
     isSearchRunning: false,
-    steps: null
+    steps: null,
+    diagonalMovement: 'never',
+    diagonalWeight: '1'
   };
+
+  handleDiagChange = diagonalMovement => this.setState({ diagonalMovement });
+  setDiagonalWeight = diagonalWeight => this.setState({ diagonalWeight });
 
   setSearchSpeed = searchSpeed => this.setState({ searchSpeed });
 
@@ -114,7 +119,7 @@ export default class PathfindingVisulaizer extends Component {
     }
     setTimeout(() => {
       this.setIsSearchRunning(false);
-      this.setState({steps: nodesInShortestPathOrder.length - 1})
+      this.setState({ steps: nodesInShortestPathOrder.length - 1 });
     }, 50 * nodesInShortestPathOrder.length);
   }
 
@@ -148,17 +153,35 @@ export default class PathfindingVisulaizer extends Component {
   }
 
   visualizeDijkstra = () => {
-    const { grid, startNode, finishNode } = this.state;
+    const {
+      grid,
+      startNode,
+      finishNode,
+      diagonalMovement,
+      diagonalWeight
+    } = this.state;
     const startNodeObj = grid[startNode[0]][startNode[1]];
     const finishNodeObj = grid[finishNode[0]][finishNode[1]];
     this.resetSearch();
-    const visitedNodesInOrder = dijkstra2(grid, startNodeObj, finishNodeObj);
+    const visitedNodesInOrder = dijkstra2(
+      grid,
+      startNodeObj,
+      finishNodeObj,
+      diagonalMovement,
+      diagonalWeight
+    );
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
     this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
   };
 
   visualizeAstar = heuristic => {
-    const { grid, startNode, finishNode } = this.state;
+    const {
+      grid,
+      startNode,
+      finishNode,
+      diagonalMovement,
+      diagonalWeight
+    } = this.state;
     const startNodeObj = grid[startNode[0]][startNode[1]];
     const finishNodeObj = grid[finishNode[0]][finishNode[1]];
     this.resetSearch();
@@ -166,7 +189,9 @@ export default class PathfindingVisulaizer extends Component {
       grid,
       startNodeObj,
       finishNodeObj,
-      heuristic
+      heuristic,
+      diagonalMovement,
+      diagonalWeight
     );
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNodeObj);
     this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
@@ -180,7 +205,9 @@ export default class PathfindingVisulaizer extends Component {
       heuristic,
       isSearchRunning,
       searchSpeed,
-      steps
+      steps,
+      diagonalMovement,
+      diagonalWeight
     } = this.state;
 
     return (
@@ -199,11 +226,13 @@ export default class PathfindingVisulaizer extends Component {
           searchSpeed={searchSpeed}
           setSearchSpeed={this.setSearchSpeed}
           randomWalls={this.randomWalls}
+          diagonalMovement={diagonalMovement}
+          handleDiagChange={this.handleDiagChange}
+          diagonalWeight={diagonalWeight}
+          setDiagonalWeight={this.setDiagonalWeight}
         />
         {steps ? (
-          <div className='notification'>
-            Steps in path: {steps}
-          </div>
+          <div className="notification">Steps in path: {steps}</div>
         ) : null}
         <div className="grid">
           {grid.map((row, rowIndex) => {
