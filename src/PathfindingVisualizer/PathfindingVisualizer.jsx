@@ -18,8 +18,7 @@ import { getNodesInShortestPathOrder } from '../searchAlgorithms/helpers';
 import Bar from './Bar/Bar';
 import { getNewGridWithRandomWalls } from '../mazeGeneration/randomWalls';
 import {
-  recursiveDivisionMaze,
-  checkEveryNodeInMazeIsWallInGrid
+  recursiveDivisionMaze
 } from '../mazeGeneration/recursiveDivision';
 
 export default class PathfindingVisulaizer extends Component {
@@ -154,6 +153,7 @@ export default class PathfindingVisulaizer extends Component {
   }
 
   animateWalls(wallNodesInOrder, grid) {
+    this.fullReset()
     for (let i = 0; i < wallNodesInOrder.length; i++) {
       setTimeout(() => {
         const node = wallNodesInOrder[i];
@@ -161,7 +161,6 @@ export default class PathfindingVisulaizer extends Component {
       }, 10 * i);
     }
     setTimeout(() => {
-      // console.log(checkEveryNodeInMazeIsWallInGrid(wallNodesInOrder, grid))
       this.setState({ isSearchRunning: false, grid });
     }, 10 * wallNodesInOrder.length);
   }
