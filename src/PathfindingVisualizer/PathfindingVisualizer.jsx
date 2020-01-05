@@ -12,11 +12,11 @@ import {
   getNewGridWithFinishToggled,
   resetSearch,
   getSpeeds,
-  getNewGridWithRandomWalls
 } from './utils/gridHelpers';
 import { astar } from '../searchAlgorithms/Astar';
 import { getNodesInShortestPathOrder } from '../searchAlgorithms/helpers';
 import Bar from './Bar/Bar';
+import { getNewGridWithRandomWalls } from '../mazeGeneration/randomWalls';
 
 export default class PathfindingVisulaizer extends Component {
   state = {
@@ -99,9 +99,10 @@ export default class PathfindingVisulaizer extends Component {
   };
 
   randomWalls = () => {
-    const newGrid = getNewGridWithRandomWalls(this.state.grid);
-    this.resetSearch();
-    this.setState({ grid: newGrid });
+    const {newGrid, wallNodesInOrder } = getNewGridWithRandomWalls(this.state.grid);
+    this.animateWalls(wallNodesInOrder, newGrid)
+    // this.resetSearch();
+    // this.setState({ grid: newGrid });
   };
 
   animateShortestPath(nodesInShortestPathOrder) {
@@ -132,6 +133,18 @@ export default class PathfindingVisulaizer extends Component {
         node.ref.current.className = 'node node-visited';
       }, speed * i);
     }
+  }
+
+  animateWalls(wallNodesInOrder, grid) {
+    for (let i = 0; i < wallNodesInOrder.length; i++) {
+      setTimeout(() => {
+        const node = wallNodesInOrder[i];
+        node.ref.current.className = 'node node-wall';
+      }, 15 * i);
+    }
+    setTimeout(() => {
+      this.setState({isSearchRunning: false, grid})
+    }, 15 * wallNodesInOrder.length);
   }
 
   visualizeDijkstra = () => {

@@ -89,21 +89,7 @@ export const getNewGridWithWallToggled = (grid, row, col) => {
   return newGrid;
 };
 
-export const getNewGridWithRandomWalls = grid => {
-  const resetGrid = fullReset(grid);
-  const newGrid = resetGrid.map(row => {
-    return row.map(node => {
-      if (Math.random() < 0.3 && !node.isStart && !node.isFinish) {
-        node.isWall = true;
-      } else {
-        node.isWall = false;
-      }
-      return node;
-    });
-  });
-  console.log('finished random walls')
-  return newGrid;
-};
+
 
 export const getNewGridWithStartToggled = (grid, row, col) => {
   const newGrid = noStartNodes(grid);
