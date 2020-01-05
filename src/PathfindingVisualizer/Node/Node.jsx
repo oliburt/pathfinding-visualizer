@@ -7,6 +7,7 @@ export default class Node extends Component {
     if (props.isFinish) return 'node-finish'
     if (props.isStart) return 'node-start'
     if (props.isWall) return 'node-wall'
+    return ''
   }
   render() {
     const {
