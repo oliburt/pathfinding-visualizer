@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Node from './Node/Node';
 // import { dijkstra } from '../algorithms/Dijkstra';
-import { dijkstra2 } from '../algorithms/dijkstra2';
+import { dijkstra2 } from '../searchAlgorithms/dijkstra2';
 
 import './PathfindingVisualizer.css';
 import {
@@ -14,8 +14,8 @@ import {
   getSpeeds,
   getNewGridWithRandomWalls
 } from './utils/gridHelpers';
-import { astar } from '../algorithms/Astar';
-import { getNodesInShortestPathOrder } from '../algorithms/helpers';
+import { astar } from '../searchAlgorithms/Astar';
+import { getNodesInShortestPathOrder } from '../searchAlgorithms/helpers';
 import Bar from './Bar/Bar';
 
 export default class PathfindingVisulaizer extends Component {

@@ -6,7 +6,7 @@ import {
   manhattanHeuristic,
   octileHeuristic,
   chebyshevHeuristic
-} from '../../algorithms/heuristics';
+} from '../../searchAlgorithms/heuristics';
 import ResetButtons from './components/ResetButtons';
 import AlgOptions from './components/AlgOptions';
 import ObstacleButtons from './components/ObstacleButtons';
