@@ -23,9 +23,9 @@ export const getSpeeds = searchSpeed => {
 
 export const createGrid = (startNode, finishNode) => {
   const grid = [];
-  for (let row = 0; row < 30; row++) {
+  for (let row = 0; row < 29; row++) {
     const currentRow = [];
-    for (let col = 0; col < 90; col++) {
+    for (let col = 0; col < 89; col++) {
       currentRow.push(createNode(col, row, startNode, finishNode));
     }
     grid.push(currentRow);
@@ -73,7 +73,6 @@ export const fullReset = grid => {
       node.fScore = Infinity;
     });
   });
-  console.log('finish full reset')
   return newGrid;
 };
 
@@ -128,7 +127,7 @@ const noFinishNodes = grid => {
   });
 };
 
-const deepCloneGrid = grid => {
+export const deepCloneGrid = grid => {
   return grid.map(row => {
     return row.map(node => {
       return {
