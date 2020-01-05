@@ -11,12 +11,16 @@ import {
   getNewGridWithStartToggled,
   getNewGridWithFinishToggled,
   resetSearch,
-  getSpeeds,
+  getSpeeds
 } from './utils/gridHelpers';
 import { astar } from '../searchAlgorithms/Astar';
 import { getNodesInShortestPathOrder } from '../searchAlgorithms/helpers';
 import Bar from './Bar/Bar';
 import { getNewGridWithRandomWalls } from '../mazeGeneration/randomWalls';
+import {
+  recursiveDivisionMaze,
+  checkEveryNodeInMazeIsWallInGrid
+} from '../mazeGeneration/recursiveDivision';
 
 export default class PathfindingVisulaizer extends Component {
   state = {
@@ -104,10 +108,19 @@ export default class PathfindingVisulaizer extends Component {
   };
 
   randomWalls = () => {
-    const {newGrid, wallNodesInOrder } = getNewGridWithRandomWalls(this.state.grid);
-    this.animateWalls(wallNodesInOrder, newGrid)
+    const { newGrid, wallNodesInOrder } = getNewGridWithRandomWalls(
+      this.state.grid
+    );
+    this.animateWalls(wallNodesInOrder, newGrid);
     // this.resetSearch();
     // this.setState({ grid: newGrid });
+  };
+
+  recursiveDivisionWalls = () => {
+    const { newGrid, wallNodesInOrder } = recursiveDivisionMaze(
+      this.state.grid
+    );
+    this.animateWalls(wallNodesInOrder, newGrid);
   };
 
   animateShortestPath(nodesInShortestPathOrder) {
@@ -145,11 +158,12 @@ export default class PathfindingVisulaizer extends Component {
       setTimeout(() => {
         const node = wallNodesInOrder[i];
         node.ref.current.className = 'node node-wall-animation';
-      }, 15 * i);
+      }, 10 * i);
     }
     setTimeout(() => {
-      this.setState({isSearchRunning: false, grid})
-    }, 15 * wallNodesInOrder.length);
+      // console.log(checkEveryNodeInMazeIsWallInGrid(wallNodesInOrder, grid))
+      this.setState({ isSearchRunning: false, grid });
+    }, 10 * wallNodesInOrder.length);
   }
 
   visualizeDijkstra = () => {
@@ -226,6 +240,7 @@ export default class PathfindingVisulaizer extends Component {
           searchSpeed={searchSpeed}
           setSearchSpeed={this.setSearchSpeed}
           randomWalls={this.randomWalls}
+          recursiveDivisionWalls={this.recursiveDivisionWalls}
           diagonalMovement={diagonalMovement}
           handleDiagChange={this.handleDiagChange}
           diagonalWeight={diagonalWeight}
