@@ -144,7 +144,7 @@ export default class PathfindingVisulaizer extends Component {
     for (let i = 0; i < wallNodesInOrder.length; i++) {
       setTimeout(() => {
         const node = wallNodesInOrder[i];
-        node.ref.current.className = 'node node-wall';
+        node.ref.current.className = 'node node-wall-animation';
       }, 15 * i);
     }
     setTimeout(() => {
